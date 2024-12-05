@@ -1,0 +1,28 @@
+services:
+  hestia:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - "8081:80"
+      - "8082:443"
+    volumes:
+      - ~/.aspnet/https:/https:ro
+
+  db:
+    image: postgres:latest
+    container_name: hestia_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=Hestia
+    ports:
+      - 5432:5432
+    restart: always
