@@ -1,6 +1,6 @@
 # **Clean Architecture - Rest API**
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/synboxdev/RestApi-CleanArchitecture/dotnet.yml)
+[![.NET Build & Test Status](https://github.com/synboxdev/RestApi-CleanArchitecture/actions/workflows/dotnet.yml/badge.svg)](https://github.com/synboxdev/RestApi-CleanArchitecture/actions/workflows/dotnet.yml)
 
 ## 📄 <b>Table of contents</b>
 
