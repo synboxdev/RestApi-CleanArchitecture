@@ -6,8 +6,8 @@
 
 * [About](#about)
 * [Project structure](#project-structure)
-* [Key features](#key-features)
 * [Technology stack](#technology-stack)
+* [Key features](#key-features)
 * [Getting started](#getting-started)
     * [Prerequisites](#prerequisites)
     * [Getting the project](#getting-the-project)
