@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.4.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Hestia.Domain\Hestia.Domain.csproj" />
+    <ProjectReference Include="..\Hestia.Mediator\Hestia.Mediator.csproj" />
   </ItemGroup>
 
 </Project>

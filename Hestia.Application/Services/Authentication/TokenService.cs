@@ -1,8 +1,8 @@
 ﻿using Hestia.Access.Requests.Authentication.Commands.CreateTokenLog;
 using Hestia.Application.Interfaces.Authentication;
-using Hestia.Application.Interfaces.Infrastructure;
 using Hestia.Application.Models.Shared;
 using Hestia.Domain.Models.Authentication;
+using Hestia.Mediator.Infrastructure.Layers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;

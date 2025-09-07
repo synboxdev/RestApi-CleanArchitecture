@@ -1,6 +1,7 @@
 ﻿using Hestia.Access.Requests.Shared;
+using Hestia.Mediator.Infrastructure.Messaging;
+using Hestia.Mediator.Infrastructure.Types;
 using Hestia.Persistence.Contexts;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Hestia.Persistence.Handlers.Shared;

@@ -1,13 +1,12 @@
-﻿using AutoMapper;
-using Hestia.Access.Requests.Product.Commands.CreateProduct;
+﻿using Hestia.Access.Requests.Product.Commands.CreateProduct;
 using Hestia.Access.Requests.Product.Commands.DeleteProduct;
 using Hestia.Access.Requests.Product.Commands.UpdateProduct;
 using Hestia.Access.Requests.Product.Queries.GetExisting;
-using Hestia.Application.Interfaces.Infrastructure;
 using Hestia.Application.Services.Product;
 using Hestia.Domain.Models.Product.Inbound.CreateProduct;
 using Hestia.Domain.Models.Product.Inbound.GetProduct;
 using Hestia.Domain.Models.Product.Inbound.UpdateProduct;
+using Hestia.Mediator.Infrastructure.Layers;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Net;
@@ -17,16 +16,14 @@ namespace Hestia.Application.Tests.Services.Product;
 public class ProductServiceCreateProductTests
 {
     private readonly Mock<IAccessLayer> _mockAccessLayer;
-    private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<ILogger<ProductService>> _mockLogger;
     private readonly ProductService _productService;
 
     public ProductServiceCreateProductTests()
     {
         _mockAccessLayer = new Mock<IAccessLayer>();
-        _mockMapper = new Mock<IMapper>();
         _mockLogger = new Mock<ILogger<ProductService>>();
-        _productService = new ProductService(_mockAccessLayer.Object, _mockMapper.Object, _mockLogger.Object);
+        _productService = new ProductService(_mockAccessLayer.Object, _mockLogger.Object);
     }
 
     [Fact]
@@ -138,8 +135,6 @@ public class ProductServiceCreateProductTests
 
         _mockAccessLayer.Setup(x => x.ExecuteAsync(It.IsAny<UpdateProductCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
-
-        _mockMapper.Setup(m => m.Map(updateProductDto, existingProduct)).Returns(existingProduct);
 
         // Act
         var (isUpdated, statusCode) = await _productService.UpdateProductAsync(updateProductDto);
@@ -303,8 +298,6 @@ public class ProductServiceCreateProductTests
 
         _mockAccessLayer.Setup(x => x.ExecuteAsync(It.IsAny<GetExistingProductByCompositeIdQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
-
-        _mockMapper.Setup(m => m.Map<GetProductResponseDto>(existingProduct)).Returns(getProductResponseDto);
 
         // Act
         var (productResponse, statusCode) = await _productService.GetProductAsync(getProductDto);

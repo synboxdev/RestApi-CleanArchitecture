@@ -1,7 +1,7 @@
 ﻿using Hestia.Application.Models.Authentication.Inbound;
 using Hestia.Application.Models.Authentication.Outbound;
 using Hestia.Application.Models.Shared;
-using MediatR;
+using Hestia.Mediator.Infrastructure.Messaging;
 
 namespace Hestia.Application.Handlers.Authentication.Commands.Register;
 

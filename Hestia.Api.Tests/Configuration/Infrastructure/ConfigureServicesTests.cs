@@ -2,6 +2,7 @@
 using Hestia.Background.Interfaces;
 using Hestia.Background.Tasks;
 using Hestia.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -47,8 +48,15 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection ConfigureInfrastructuresServices(this IServiceCollection services)
     {
-        services.AddScoped<HestiaContext>();
-        services.AddScoped<RheaContext>();
+        services.AddDbContext<HestiaContext>(options =>
+        {
+            options.UseInMemoryDatabase("TestDb");
+        });
+
+        services.AddDbContext<RheaContext>(options =>
+        {
+            options.UseInMemoryDatabase("TestDb");
+        });
 
         services.AddMemoryCache();
         services.ConfigureBackgroundRunners();

@@ -1,5 +1,5 @@
 ﻿using Hestia.Domain.Models.Authentication;
-using MediatR;
+using Hestia.Mediator.Infrastructure.Messaging;
 
 namespace Hestia.Access.Requests.User.Queries.UserExists;
 

@@ -1,34 +1,10 @@
-﻿using AutoMapper;
-using Hestia.Application.Profiles.Product;
-using Hestia.Domain.Models.Product.Inbound.GetProduct;
+﻿using Hestia.Application.Mappers;
 using Hestia.Domain.Models.Product.Inbound.UpdateProduct;
 
 namespace Hestia.Application.Tests.Profiles.Product;
 
 public class ProductProfileTests
 {
-    private readonly IMapper _mapper;
-
-    public ProductProfileTests()
-    {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<ProductProfile>();
-        });
-        _mapper = config.CreateMapper();
-    }
-
-    [Fact]
-    public void ProductProfile_ConfigurationIsValid()
-    {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<ProductProfile>();
-        });
-
-        config.AssertConfigurationIsValid();
-    }
-
     [Fact]
     public void UpdateProductDto_To_Product_Mapping()
     {
@@ -41,26 +17,27 @@ public class ProductProfileTests
             Description = "UpdatedDescription",
             Price = 99.99M
         };
-        var product = new Access.Entities.Product.Product(Guid.NewGuid())
+
+        var product = new Access.Entities.Product.Product(updateProductDto.Id)
         {
-            ExternalId = "originalExternalId",
+            ExternalId = updateProductDto.ExternalId,
             DateCreated = DateTime.UtcNow.AddDays(-1),
-            Name = "UpdatedName",
-            Description = "UpdatedDescription",
-            Price = 99.99M,
+            Name = "OriginalName",
+            Description = "OriginalDescription",
+            Price = 10.00M,
             UserId = "UserId"
         };
 
         // Act
-        var mappedProduct = _mapper.Map(updateProductDto, product);
+        product.ApplyUpdate(updateProductDto);
 
         // Assert
-        Assert.Equal(product.Id, mappedProduct.Id);
-        Assert.Equal(product.ExternalId, mappedProduct.ExternalId);
-        Assert.Equal(product.DateCreated, mappedProduct.DateCreated);
-        Assert.Equal(updateProductDto.Name, mappedProduct.Name);
-        Assert.Equal(updateProductDto.Description, mappedProduct.Description);
-        Assert.Equal(updateProductDto.Price, mappedProduct.Price);
+        Assert.Equal(updateProductDto.Id, product.Id);
+        Assert.Equal(updateProductDto.ExternalId, product.ExternalId);
+        Assert.Equal(updateProductDto.Name, product.Name);
+        Assert.Equal(updateProductDto.Description, product.Description);
+        Assert.Equal(updateProductDto.Price, product.Price);
+        Assert.True(product.DateEdited > product.DateCreated);
     }
 
     [Fact]
@@ -71,7 +48,7 @@ public class ProductProfileTests
         {
             ExternalId = "originalExternalId",
             DateCreated = DateTime.UtcNow.AddDays(-1),
-            DateEdited = DateTime.UtcNow.AddDays(-1),
+            DateEdited = DateTime.UtcNow,
             Name = "UpdatedName",
             Description = "UpdatedDescription",
             Price = 99.99M,
@@ -79,11 +56,13 @@ public class ProductProfileTests
         };
 
         // Act
-        var productResponseDto = _mapper.Map<GetProductResponseDto>(product);
+        var productResponseDto = product.ToResponseDto();
 
         // Assert
         Assert.Equal(product.Id, productResponseDto.Id);
         Assert.Equal(product.ExternalId, productResponseDto.ExternalId);
+        Assert.Equal(product.DateCreated, productResponseDto.DateCreated);
+        Assert.Equal(product.DateEdited, productResponseDto.DateEdited);
         Assert.Equal(product.Name, productResponseDto.Name);
         Assert.Equal(product.Description, productResponseDto.Description);
         Assert.Equal(product.Price, productResponseDto.Price);

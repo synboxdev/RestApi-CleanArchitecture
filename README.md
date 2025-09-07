@@ -56,7 +56,7 @@ This project has the following structure:
 
 - Implementation of [**Clean architecture**](https://www.geeksforgeeks.org/complete-guide-to-clean-architecture/) and [**SOLID**](https://en.wikipedia.org/wiki/SOLID) software design principles
 - [**.NET 9**](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) with [**Entity Framework Core**](https://learn.microsoft.com/en-us/ef/core/)
-- [**Command Query Responsibility Segregation (CQRS)**](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs) with [**MediatR pattern**](https://en.wikipedia.org/wiki/Mediator_pattern)
+- [**Command Query Responsibility Segregation (CQRS)**](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs) with [**Mediator pattern**](https://en.wikipedia.org/wiki/Mediator_pattern)
 - [**JWT Token & Authentication**](https://en.wikipedia.org/wiki/JSON_Web_Token) with [**ASP.NET Core Identity**](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) 
 - Global exception middleware handling and data validation using [**Fluent Validation**](https://docs.fluentvalidation.net/en/latest/) library
 - Standardized API response modeling

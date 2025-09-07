@@ -1,9 +1,9 @@
 ﻿using Hestia.Application.Handlers.Authentication.Commands.Login;
 using Hestia.Application.Handlers.Authentication.Commands.Register;
-using Hestia.Application.Interfaces.Infrastructure;
 using Hestia.Application.Models.Authentication.Inbound;
 using Hestia.Application.Models.Authentication.Outbound;
 using Hestia.Application.Models.Shared;
+using Hestia.Mediator.Infrastructure.Layers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hestia.Api.Controllers;

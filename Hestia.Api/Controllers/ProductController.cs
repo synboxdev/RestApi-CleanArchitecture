@@ -2,11 +2,11 @@
 using Hestia.Application.Handlers.Product.Commands.DeleteProduct;
 using Hestia.Application.Handlers.Product.Commands.UpdateProduct;
 using Hestia.Application.Handlers.Product.Queries.GetProduct;
-using Hestia.Application.Interfaces.Infrastructure;
 using Hestia.Application.Models.Shared;
 using Hestia.Domain.Models.Product.Inbound.CreateProduct;
 using Hestia.Domain.Models.Product.Inbound.GetProduct;
 using Hestia.Domain.Models.Product.Inbound.UpdateProduct;
+using Hestia.Mediator.Infrastructure.Layers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,7 +1,8 @@
 ﻿using Hestia.Access.Entities.Authentication;
 using Hestia.Access.Requests.Authentication.Commands.CreateTokenLog;
+using Hestia.Mediator.Infrastructure.Messaging;
+using Hestia.Mediator.Infrastructure.Types;
 using Hestia.Persistence.Contexts;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

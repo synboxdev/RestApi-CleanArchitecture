@@ -1,19 +1,19 @@
-﻿using AutoMapper;
-using Hestia.Access.Requests.Product.Commands.CreateProduct;
+﻿using Hestia.Access.Requests.Product.Commands.CreateProduct;
 using Hestia.Access.Requests.Product.Commands.DeleteProduct;
 using Hestia.Access.Requests.Product.Commands.UpdateProduct;
 using Hestia.Access.Requests.Product.Queries.GetExisting;
-using Hestia.Application.Interfaces.Infrastructure;
 using Hestia.Application.Interfaces.Product;
+using Hestia.Application.Mappers;
 using Hestia.Domain.Models.Product.Inbound.CreateProduct;
 using Hestia.Domain.Models.Product.Inbound.GetProduct;
 using Hestia.Domain.Models.Product.Inbound.UpdateProduct;
+using Hestia.Mediator.Infrastructure.Layers;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
 namespace Hestia.Application.Services.Product;
 
-public class ProductService(IAccessLayer accessLayer, IMapper mapper, ILogger<ProductService> logger) : IProductService
+public class ProductService(IAccessLayer accessLayer, ILogger<ProductService> logger) : IProductService
 {
     public async Task<(Guid?, HttpStatusCode)> CreateProductAsync(CreateProductDto product, CancellationToken cancellationToken = default)
     {
@@ -45,7 +45,7 @@ public class ProductService(IAccessLayer accessLayer, IMapper mapper, ILogger<Pr
             if (existingProduct is null)
                 return (false, HttpStatusCode.NotFound);
 
-            existingProduct = mapper.Map(product, existingProduct);
+            existingProduct.ApplyUpdate(product);
             bool existingProductUpdateResult = await ExecuteUpdateProductCommandAsync(existingProduct, cancellationToken);
 
             return existingProductUpdateResult ? (true, HttpStatusCode.OK) : (false, HttpStatusCode.BadRequest);
@@ -85,7 +85,7 @@ public class ProductService(IAccessLayer accessLayer, IMapper mapper, ILogger<Pr
 
             return existingProduct is null ?
                 ((GetProductResponseDto?, HttpStatusCode))(null, HttpStatusCode.NotFound) :
-                (mapper.Map<GetProductResponseDto>(existingProduct), HttpStatusCode.OK);
+                (existingProduct.ToResponseDto(), HttpStatusCode.OK);
         }
         catch (Exception ex)
         {
@@ -114,7 +114,7 @@ public class ProductService(IAccessLayer accessLayer, IMapper mapper, ILogger<Pr
     private async Task<Access.Entities.Product.Product?> GetExistingProductAsync(GetProductDto product, CancellationToken cancellationToken = default) =>
         product.Id.HasValue && product.Id != Guid.Empty && !string.IsNullOrEmpty(product.ExternalId) ?
         await GetExistingProductAsync((Guid)product.Id, product.ExternalId, cancellationToken) :
-        !product.Id.HasValue || product.Id == Guid.Empty ?
+        (!product.Id.HasValue || product.Id == Guid.Empty) && !string.IsNullOrEmpty(product.ExternalId) ?
         await GetExistingProductAsync(product.ExternalId, cancellationToken) :
         string.IsNullOrEmpty(product.ExternalId) ?
         await GetExistingProductAsync(product.Id, cancellationToken) : null;

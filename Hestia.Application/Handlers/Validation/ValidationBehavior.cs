@@ -1,13 +1,17 @@
 ﻿using FluentValidation;
-using MediatR;
+using Hestia.Mediator.Infrastructure.Messaging;
+using Hestia.Mediator.Infrastructure.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace Hestia.Application.Handlers.Validation;
 
-public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators, IServiceProvider serviceProvider, ILogger<ValidationBehavior<TRequest, TResponse>> logger)
-    : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+public class ValidationBehavior<TRequest, TResponse>(
+    IEnumerable<IValidator<TRequest>> validators,
+    IServiceProvider serviceProvider,
+    ILogger<ValidationBehavior<TRequest, TResponse>> logger) :
+    IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {

@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using Hestia.Mediator.Infrastructure.Messaging;
 
-namespace Hestia.Application.Interfaces.Infrastructure;
+namespace Hestia.Mediator.Infrastructure;
 
 public interface IRequestExecutor
 {

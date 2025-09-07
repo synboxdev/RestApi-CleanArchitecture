@@ -2,17 +2,18 @@
 using Hestia.Api.Configuration.Application;
 using Hestia.Api.Tests.Shared;
 using Hestia.Application.Interfaces.Authentication;
-using Hestia.Application.Interfaces.Infrastructure;
 using Hestia.Application.Interfaces.Product;
 using Hestia.Application.Interfaces.Response;
 using Hestia.Domain.Models.Authentication;
+using Hestia.Mediator.Infrastructure;
+using Hestia.Mediator.Infrastructure.Layers;
 using Hestia.Persistence.Contexts;
-using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -33,7 +34,10 @@ public class ConfigureServicesTests
         services.AddSingleton<IWebHostEnvironment>(new MockWebHostEnvironment { EnvironmentName = Environments.Development });
         services.AddMemoryCache();
         services.AddDataProtection();
-        services.AddScoped<HestiaContext>();
+        services.AddDbContext<HestiaContext>(options =>
+        {
+            options.UseInMemoryDatabase("TestDb");
+        });
 
         // Add Identity services
         services.AddIdentityCore<ApplicationUser>(options => { })
@@ -66,10 +70,6 @@ public class ConfigureServicesTests
         // Check if MediatR is registered
         var mediator = serviceProvider.GetService<IMediator>();
         Assert.NotNull(mediator);
-
-        // Check if AutoMapper is registered
-        var mapper = serviceProvider.GetService<AutoMapper.IMapper>();
-        Assert.NotNull(mapper);
 
         // Check if FluentValidation validators are registered
         var validators = serviceProvider.GetServices<IValidator>();

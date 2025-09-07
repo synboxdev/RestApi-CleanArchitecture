@@ -1,6 +1,6 @@
 ﻿using Hestia.Access.Requests.Product.Commands.DeleteProduct;
+using Hestia.Mediator.Infrastructure.Messaging;
 using Hestia.Persistence.Contexts;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Hestia.Persistence.Handlers.Product.Commands.DeleteProduct;

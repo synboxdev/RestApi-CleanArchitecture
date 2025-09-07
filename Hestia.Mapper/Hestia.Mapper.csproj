@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <ProjectReference Include="..\Hestia.Access\Hestia.Access.csproj" />
+	  <ProjectReference Include="..\Hestia.Application.Models\Hestia.Application.Models.csproj" />
+	  <ProjectReference Include="..\Hestia.Domain\Hestia.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

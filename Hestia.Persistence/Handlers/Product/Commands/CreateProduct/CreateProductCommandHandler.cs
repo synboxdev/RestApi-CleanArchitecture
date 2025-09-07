@@ -1,7 +1,7 @@
 ﻿using Hestia.Access.Requests.Product.Commands.CreateProduct;
+using Hestia.Mediator.Infrastructure.Messaging;
 using Hestia.Persistence.Contexts;
 using Hestia.Persistence.Handlers.Product.Queries.GetExisting;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Hestia.Persistence.Handlers.Product.Commands.CreateProduct;

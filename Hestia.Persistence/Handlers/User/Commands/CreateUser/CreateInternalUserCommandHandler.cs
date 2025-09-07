@@ -1,6 +1,6 @@
 ﻿using Hestia.Access.Requests.User.Commands.CreateUser;
+using Hestia.Mediator.Infrastructure.Messaging;
 using Hestia.Persistence.Contexts;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Hestia.Persistence.Handlers.User.Commands.CreateUser;
