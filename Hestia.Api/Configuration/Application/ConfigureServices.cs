@@ -1,13 +1,16 @@
 ﻿using FluentValidation;
 using Hestia.Application.Handlers.Validation;
 using Hestia.Application.Interfaces.Authentication;
-using Hestia.Application.Interfaces.Infrastructure;
 using Hestia.Application.Interfaces.Product;
 using Hestia.Application.Interfaces.Response;
 using Hestia.Application.Services;
 using Hestia.Application.Services.Authentication;
 using Hestia.Application.Services.Product;
-using MediatR;
+using Hestia.Mediator.Infrastructure;
+using Hestia.Mediator.Infrastructure.Layers;
+using Hestia.Mediator.Infrastructure.Messaging;
+using Hestia.Mediator.Infrastructure.Pipeline;
+using Hestia.Mediator.Services;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -22,18 +25,11 @@ public static class ConfigureServices
         services.AddApiServices();
         services.AddApplicationServices();
 
-        // MediatR
-        services.AddMediatR();
-
-        // AutoMapper
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        // Mediator pattern
+        services.AddMediator();
 
         // FluentValidation validators
         services.AddFluentValidationValidators();
-
-        // MediatR layers
-        services.AddTransient<IAccessLayer, MediatrAdapter>();
-        services.AddTransient<ICoreLayer, MediatrAdapter>();
 
         services.AddControllers().AddJsonOptions(options =>
         {
@@ -43,14 +39,47 @@ public static class ConfigureServices
         return services;
     }
 
-    public static IServiceCollection AddMediatR(this IServiceCollection services)
+    public static IServiceCollection AddMediator(this IServiceCollection services)
     {
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-        });
+        // Mediator pattern service
+        services.AddSingleton<IMediator, MediatorService>();
+
+        // Mediator pattern layers
+        services.AddTransient<IAccessLayer, MediatorAdapter>();
+        services.AddTransient<ICoreLayer, MediatorAdapter>();
+
+        services.AddRequestHandlers();
 
         return services;
+    }
+
+    private static void AddRequestHandlers(this IServiceCollection services)
+    {
+        var handlerInterfaceType = typeof(IRequestHandler<,>);
+
+        var assemblies = Directory
+            .GetFiles(AppContext.BaseDirectory, "*.dll", SearchOption.TopDirectoryOnly)
+            .Where(file =>
+            {
+                string name = Path.GetFileName(file);
+                // Adjust filter to match your solution's assemblies
+                return name.StartsWith("Hestia.", StringComparison.OrdinalIgnoreCase);
+            })
+            .Select(Assembly.LoadFrom)
+            .ToList();
+
+        var handlerTypes = assemblies
+            .SelectMany(a => a.GetTypes())
+            .Where(t => !t.IsAbstract && !t.IsInterface)
+            .SelectMany(t => t.GetInterfaces(), (type, iface) => new { type, iface })
+            .Where(x => x.iface.IsGenericType &&
+                        x.iface.GetGenericTypeDefinition() == handlerInterfaceType)
+            .ToList();
+
+        foreach (var handler in handlerTypes)
+        {
+            services.AddTransient(handler.iface, handler.type);
+        }
     }
 
     public static IServiceCollection AddFluentValidationValidators(this IServiceCollection services)

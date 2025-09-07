@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Hestia.Mediator.Infrastructure.Messaging;
 
 namespace Hestia.Access.Requests.Product.Commands.DeleteProduct;
 

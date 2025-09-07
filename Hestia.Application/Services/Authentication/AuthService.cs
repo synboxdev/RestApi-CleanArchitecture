@@ -1,13 +1,13 @@
-﻿using AutoMapper;
-using Hestia.Access.Requests.Shared;
+﻿using Hestia.Access.Requests.Shared;
 using Hestia.Access.Requests.User.Queries.UserExists;
 using Hestia.Access.Requests.User.Queries.ValidateUserLogin;
 using Hestia.Application.Interfaces.Authentication;
-using Hestia.Application.Interfaces.Infrastructure;
+using Hestia.Application.Mappers;
 using Hestia.Application.Models.Authentication.Inbound;
 using Hestia.Application.Models.Authentication.Outbound;
 using Hestia.Domain.Enumerations;
 using Hestia.Domain.Models.Authentication;
+using Hestia.Mediator.Infrastructure.Layers;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
@@ -16,19 +16,17 @@ namespace Hestia.Application.Services.Authentication;
 public class AuthService(
     ITokenService tokenService,
     IUserService userService,
-    IMapper mapper,
     IAccessLayer accessLayer,
     ILogger<AuthService> logger) : IAuthService
 {
     public async Task<(ApplicationUserLoginResponseDto, HttpStatusCode)> LoginAsync(ApplicationUserLoginDto model, CancellationToken cancellationToken = default)
     {
         string? token = null!;
-        ApplicationUser? existingUser = null;
-        var statusCode = HttpStatusCode.NoContent;
+        HttpStatusCode statusCode;
 
         try
         {
-            existingUser = await GetExistingUserAsync(model.Username, model.Email, cancellationToken);
+            var existingUser = await GetExistingUserAsync(model.Username, model.Email, cancellationToken);
 
             if (existingUser is null)
             {
@@ -55,7 +53,7 @@ public class AuthService(
         return (response, statusCode);
     }
 
-    public async Task<(ApplicationUserRegisterResponseDto, HttpStatusCode)> RegisterAsync(ApplicationUserRegisterDto model, Role? role = null, CancellationToken cancellationToken = default)
+    public async Task<(ApplicationUserRegisterResponseDto?, HttpStatusCode)> RegisterAsync(ApplicationUserRegisterDto model, Role? role = null, CancellationToken cancellationToken = default)
     {
         ApplicationUser? existingUser = null;
         var statusCode = HttpStatusCode.NoContent;
@@ -83,7 +81,7 @@ public class AuthService(
             statusCode = HttpStatusCode.InternalServerError;
         }
 
-        var response = mapper.Map<ApplicationUserRegisterResponseDto>(existingUser);
+        var response = existingUser?.ToRegisterResponseDto();
         return (response, statusCode);
     }
 

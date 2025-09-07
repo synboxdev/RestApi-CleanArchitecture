@@ -2,6 +2,7 @@
 using Hestia.Background.Interfaces;
 using Hestia.Background.Tasks;
 using Hestia.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hestia.Api.Configuration.Infrastructure;
 
@@ -27,8 +28,17 @@ public static class ConfigureServices
 
     private static IServiceCollection ConfigureDbContexts(this IServiceCollection services)
     {
-        services.AddScoped<HestiaContext>();
-        services.AddScoped<RheaContext>();
+        services.AddDbContext<HestiaContext>((serviceProvider, options) =>
+        {
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            options.UseNpgsql(configuration.GetConnectionString("AuthServer"));
+        });
+
+        services.AddDbContext<RheaContext>((serviceProvider, options) =>
+        {
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            options.UseNpgsql(configuration.GetConnectionString("DataServer"));
+        });
 
         return services;
     }

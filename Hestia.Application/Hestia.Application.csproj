@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="FluentValidation" Version="11.11.0" />
-    <PackageReference Include="MediatR" Version="12.4.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.1" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.8" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Hestia.Access\Hestia.Access.csproj" />
+    <ProjectReference Include="..\Hestia.Application.Models\Hestia.Application.Models.csproj" />
     <ProjectReference Include="..\Hestia.Domain\Hestia.Domain.csproj" />
+    <ProjectReference Include="..\Hestia.Mapper\Hestia.Mapper.csproj" />
+    <ProjectReference Include="..\Hestia.Mediator\Hestia.Mediator.csproj" />
   </ItemGroup>
 
 </Project>

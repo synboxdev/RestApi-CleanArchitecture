@@ -1,6 +1,6 @@
 ﻿using Hestia.Access.Requests.User.Commands.CreateUser;
 using Hestia.Domain.Models.Authentication;
-using MediatR;
+using Hestia.Mediator.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Identity;
 
 namespace Hestia.Persistence.Handlers.User.Commands.CreateUser;

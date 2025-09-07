@@ -1,7 +1,7 @@
 ﻿using Hestia.Access.Requests.User.Queries.UserExists;
 using Hestia.Domain.Models.Authentication;
+using Hestia.Mediator.Infrastructure.Messaging;
 using Hestia.Persistence.Contexts;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 

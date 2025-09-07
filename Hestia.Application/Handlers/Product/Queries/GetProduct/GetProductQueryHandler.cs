@@ -1,7 +1,7 @@
 ﻿using Hestia.Application.Interfaces.Product;
 using Hestia.Application.Models.Shared;
 using Hestia.Domain.Models.Product.Inbound.GetProduct;
-using MediatR;
+using Hestia.Mediator.Infrastructure.Messaging;
 using System.Net;
 
 namespace Hestia.Application.Handlers.Product.Queries.GetProduct;

@@ -1,12 +1,10 @@
-﻿using AutoMapper;
-using Hestia.Access.Requests.User.Queries.UserExists;
+﻿using Hestia.Access.Requests.User.Queries.UserExists;
 using Hestia.Access.Requests.User.Queries.ValidateUserLogin;
 using Hestia.Application.Interfaces.Authentication;
-using Hestia.Application.Interfaces.Infrastructure;
 using Hestia.Application.Models.Authentication.Inbound;
-using Hestia.Application.Models.Authentication.Outbound;
 using Hestia.Application.Services.Authentication;
 using Hestia.Domain.Models.Authentication;
+using Hestia.Mediator.Infrastructure.Layers;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Net;
@@ -17,7 +15,6 @@ public class AuthServiceTests
 {
     private readonly Mock<ITokenService> _mockTokenService;
     private readonly Mock<IUserService> _mockUserService;
-    private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<IAccessLayer> _mockAccessLayer;
     private readonly Mock<ILogger<AuthService>> _mockLogger;
     private readonly AuthService _authService;
@@ -26,13 +23,11 @@ public class AuthServiceTests
     {
         _mockTokenService = new Mock<ITokenService>();
         _mockUserService = new Mock<IUserService>();
-        _mockMapper = new Mock<IMapper>();
         _mockAccessLayer = new Mock<IAccessLayer>();
         _mockLogger = new Mock<ILogger<AuthService>>();
         _authService = new AuthService(
             _mockTokenService.Object,
             _mockUserService.Object,
-            _mockMapper.Object,
             _mockAccessLayer.Object,
             _mockLogger.Object
         );
@@ -111,21 +106,18 @@ public class AuthServiceTests
         var newUser = new ApplicationUser { UserName = "newuser", Email = "newuser@example.com" };
 
         _mockAccessLayer.Setup(x => x.ExecuteAsync(It.IsAny<GetExistingUserQuery>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((ApplicationUser)null);
+            .ReturnsAsync(null as ApplicationUser);
 
         _mockUserService.Setup(x => x.CreateUserAsync(model, It.IsAny<CancellationToken>()))
             .ReturnsAsync(newUser);
-
-        _mockMapper.Setup(m => m.Map<ApplicationUserRegisterResponseDto>(It.IsAny<ApplicationUser>()))
-            .Returns(new ApplicationUserRegisterResponseDto { Username = "newuser", Email = "newuser@example.com" });
 
         // Act
         var (response, statusCode) = await _authService.RegisterAsync(model);
 
         // Assert
         Assert.Equal(HttpStatusCode.Created, statusCode);
-        Assert.Equal("newuser", response.Username);
-        Assert.Equal("newuser@example.com", response.Email);
+        Assert.Equal("newuser", response?.Username);
+        Assert.Equal("newuser@example.com", response?.Email);
     }
 
     [Fact]

@@ -1,6 +1,6 @@
 ﻿using Hestia.Application.Models.Shared;
 using Hestia.Domain.Models.Product.Inbound.GetProduct;
-using MediatR;
+using Hestia.Mediator.Infrastructure.Messaging;
 
 namespace Hestia.Application.Handlers.Product.Commands.DeleteProduct;
 

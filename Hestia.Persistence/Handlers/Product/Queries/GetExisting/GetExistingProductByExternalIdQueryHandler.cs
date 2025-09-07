@@ -1,6 +1,6 @@
 ﻿using Hestia.Access.Requests.Product.Queries.GetExisting;
+using Hestia.Mediator.Infrastructure.Messaging;
 using Hestia.Persistence.Contexts;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

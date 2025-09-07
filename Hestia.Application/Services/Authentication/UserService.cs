@@ -1,9 +1,9 @@
 ﻿using Hestia.Access.Entities.User;
 using Hestia.Access.Requests.User.Commands.CreateUser;
 using Hestia.Application.Interfaces.Authentication;
-using Hestia.Application.Interfaces.Infrastructure;
 using Hestia.Application.Models.Authentication.Inbound;
 using Hestia.Domain.Models.Authentication;
+using Hestia.Mediator.Infrastructure.Layers;
 using Microsoft.AspNetCore.Identity;
 
 namespace Hestia.Application.Services.Authentication;

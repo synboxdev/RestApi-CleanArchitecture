@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -35,7 +36,10 @@ public class WebApplicationBuilderExtensionsTests
     {
         // Arrange
         var builder = WebApplication.CreateBuilder();
-        builder.Services.AddScoped<HestiaContext>();
+        builder.Services.AddDbContext<HestiaContext>(options =>
+        {
+            options.UseInMemoryDatabase("TestDb");
+        });
         builder.Environment.EnvironmentName = "Development";
         builder.Configuration.AddJsonFile("appsettings.json");
         builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json");
